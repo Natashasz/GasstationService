@@ -1,0 +1,122 @@
+---
+swagger: "2.0"
+info:
+  version: "0.0.0"
+  title: "Workpaper API"
+basePath: "/api"
+produces:
+- "application/json"
+paths:
+  /stations:
+    get:
+      description: "Fetch gas station data (prices, names, address, brand, Opening\
+        \ hours) of a given geographical position and radius."
+      operationId: "stationsGET"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "longitude"
+        in: "query"
+        required: false
+        type: "number"
+      - name: "latitude"
+        in: "query"
+        required: false
+        type: "number"
+      - name: "radius"
+        in: "query"
+        required: false
+        type: "number"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/inline_response_200"
+      x-swagger-router-controller: "Default"
+  /stations/snapshot:
+    post:
+      description: "Make a snaphot of gas station prices of all gas station in a given\
+        \ geographical position."
+      operationId: "stationsSnapshotPOST"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "longitude"
+        in: "query"
+        required: false
+        type: "number"
+      - name: "latitude"
+        in: "query"
+        required: false
+        type: "number"
+      - name: "radius"
+        in: "query"
+        required: false
+        type: "number"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            type: "object"
+            properties: {}
+      x-swagger-router-controller: "Default"
+  /station/{station-id}:
+    get:
+      description: "Get price trend for a given gas station."
+      operationId: "stationStation_idGET"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "station-id"
+        in: "path"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/inline_response_200_1"
+      x-swagger-router-controller: "Default"
+definitions:
+  stations_prices:
+    properties:
+      gastype:
+        type: "string"
+      price:
+        type: "number"
+  stations_opening hours:
+    properties:
+      text:
+        type: "string"
+      start:
+        type: "string"
+      end:
+        type: "string"
+  inline_response_200_1:
+    properties:
+      date:
+        type: "string"
+      prices:
+        type: "array"
+        items:
+          $ref: "#/definitions/stations_prices"
+  inline_response_200:
+    properties:
+      prices:
+        type: "array"
+        items:
+          $ref: "#/definitions/stations_prices"
+      name:
+        type: "string"
+      address:
+        type: "string"
+      brand:
+        type: "string"
+      opening hours:
+        type: "array"
+        items:
+          $ref: "#/definitions/stations_opening hours"
